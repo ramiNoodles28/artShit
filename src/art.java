@@ -1,8 +1,11 @@
 import java.awt.*;
+import javax.crypto.spec.PSource;
 import javax.swing.JFrame;
 import java.lang.reflect.Array;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.lang.Math;
 
 public class art extends Canvas{
@@ -46,9 +49,10 @@ public class art extends Canvas{
         boolean bubbles = false;
         boolean circles = false;
         boolean vapor = false;
+        boolean connectedCircles = false;
 
         int shape = rng.nextInt(4);
-        //shape = 5;
+        shape = 5;
 
 
         if (shape == 0) rounds = true;
@@ -56,6 +60,7 @@ public class art extends Canvas{
         else if (shape == 2) bubbles = true;
         else if (shape == 3) circles = true;
         else if (shape == 4) vapor = true;
+        else if (shape == 5) connectedCircles = true;
         else palette = true;
 
 
@@ -118,6 +123,54 @@ public class art extends Canvas{
             g.fillOval(700, 125, 200, 200);
 
 
+
+        }
+
+
+        if (connectedCircles) {
+            System.out.println("circles");
+            int x = rng.nextInt(2000)-300;
+            int y = rng.nextInt(1300)-300;
+            int r = 20;
+
+            ArrayList<int[]> cCoords = new ArrayList<>();
+            cCoords.add(new int[]{x,y,r});
+            boolean good;
+            int count = 0;
+            for (int i = 0; i<1000; i++){
+                x = rng.nextInt(2000)-300;
+                y = rng.nextInt(1300)-300;
+                r = 20;
+                good = true;
+                for (int[] coord : cCoords){
+                    double dist = Math.sqrt(Math.pow((coord[0]-x),2) + Math.pow((coord[1]-y),2));
+                    if ((coord[2]+r)>(dist-2)) {
+                        good = false;
+                        i--;
+                        break;
+                    }
+                }
+                count ++;
+                if (good) {
+                    cCoords.add(new int[]{x,y,r});
+                    count = 0;
+                }
+                System.out.println(cCoords.size() + " - " + count);
+            }
+
+            int[] temp = cCoords.get(0);
+            for (int[] coord:cCoords){
+                g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
+                g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
+                g.drawLine(coord[0], coord[1], temp[0], temp[1]);
+                temp = coord;
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
 
         }
 
