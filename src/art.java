@@ -43,6 +43,10 @@ public class art extends Canvas{
         ArrayList<ArrayList<Color>> allColors = new ArrayList<ArrayList<Color>>();
         allColors.add(aColors); allColors.add(oColors);
 
+        int fWidth = getWidth();
+        int fHeight = getHeight();
+        int res = fHeight + fWidth;
+
         boolean palette = false;
         boolean rounds = false;
         boolean triangles = false;
@@ -50,17 +54,19 @@ public class art extends Canvas{
         boolean circles = false;
         boolean vapor = false;
         boolean connectedCircles = false;
+        boolean curves = false;
 
-        int shape = rng.nextInt(4);
-        shape = 5;
+        int shape = rng.nextInt(5);
+        shape = 4;
 
 
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) bubbles = true;
-        else if (shape == 3) circles = true;
-        else if (shape == 4) vapor = true;
-        else if (shape == 5) connectedCircles = true;
+        else if (shape == 3) curves = true;
+        else if (shape == 4) circles = true;
+        else if (shape == 5) connectedCircles = true; //experimental
+        else if (shape == 6) vapor = true; //experimental
         else palette = true;
 
 
@@ -89,6 +95,26 @@ public class art extends Canvas{
             g.fillRect(0, 400, 150, 100);
             g.setColor(clrO4);
             g.fillRect(450, 400, 150, 100);
+        }
+
+        // curves
+        if (curves) {
+            System.out.println("curves");
+            int w = 90;
+            for(int x = 0; x<=2000; x+=w) {
+                for (int y = 0; y <= 1000; y += w) {
+                    g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
+                    g.fillRect(x,y,w,w);
+                    g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
+                    int corner = rng.nextInt(4);
+                    if (corner == 0) g.fillArc(x,y,2*w, 2*w, 90, 90);
+                    if (corner == 1) g.fillArc(x-w,y,2*w, 2*w, 0, 90);
+                    if (corner == 2) g.fillArc(x,y-w,2*w, 2*w, 180, 90);
+                    if (corner == 3) g.fillArc(x-w,y-w,2*w, 2*w, 270, 90);
+
+
+                }
+            }
         }
 
         //vaporwave?
@@ -126,9 +152,9 @@ public class art extends Canvas{
 
         }
 
-
+        //connectedCircles?
         if (connectedCircles) {
-            System.out.println("circles");
+            System.out.println("connected circles");
             int x = rng.nextInt(2000)-300;
             int y = rng.nextInt(1300)-300;
             int r = 20;
@@ -177,16 +203,18 @@ public class art extends Canvas{
         // circles
         if (circles) {
             System.out.println("circles");
-            int x = rng.nextInt(2000)-300;
-            int y = rng.nextInt(1300)-300;
+            int x = rng.nextInt(fWidth);
+            int y = rng.nextInt(fWidth);
             int r = rng.nextInt(50)+10;
 
             ArrayList<int[]> cCoords = new ArrayList<int[]>();
             cCoords.add(new int[]{x,y,r});
             boolean good;
-            for (int i = 0; i<6000; i++){
-                x = rng.nextInt(2000)-300;
-                y = rng.nextInt(1300)-300;
+            int over = 0;
+            for (int i = 0; i<(res); i++){
+                System.out.println(i);
+                x = rng.nextInt(fWidth);;
+                y = rng.nextInt(fHeight);
                 r = rng.nextInt(60)+ 4;
                 good = true;
                 for (int[] coord : cCoords){
@@ -198,13 +226,18 @@ public class art extends Canvas{
                     }
                 }
                 if (good) {
+                    over = i;
                     cCoords.add(new int[]{x,y,r});
-                    
+                }
+                over++;
+                if (i + 2000 < over) {
+                    break;
                 }
             }
             for (int[] coord:cCoords){
                 g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
                 g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
+                // rings
                 //g.setColor(bg);
                 //int smallr = coord[2]- 5;
                 //g.fillOval(coord[0]-smallr, coord[1]-smallr, smallr*2, smallr*2);
@@ -241,15 +274,15 @@ public class art extends Canvas{
         // triangles
         if (triangles) {
             System.out.println("triangles");
-            int w = 70;
-            for(int x = 0; x<=2000; x+=w) {
-                for (int y = 0; y <= 1000; y += w) {
-                    int weightedRandom = (rng.nextInt(20) * ((x+y)/150)) > 40? 1 : 0;
+            int w = 30;
+            for(int x = 0; x<= fWidth; x+=w) {
+                for (int y = 0; y <= fHeight; y += w) {
+                    int weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
                     g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
                     int[] xs = {x,x,(x+w)};
                     int[] ys = {y, y+w, y+w};
                     g.fillPolygon(xs,ys,3);
-                    weightedRandom = (rng.nextInt(20) * ((x+y)/150)) > 40? 1 : 0;
+                    weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
                     g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
                     int[] as = {x,(x+w),(x+w)};
                     int[] bs = {y, y, y+w};
