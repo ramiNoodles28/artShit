@@ -53,7 +53,7 @@ public class art extends Canvas{
         boolean curves = false;
         //random image types
         int shape = rng.nextInt(5);
-        //shape = 9;
+        shape = 5;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) bubbles = true;
