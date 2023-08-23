@@ -110,7 +110,7 @@ public class art extends Canvas{
         }
         //vaporwave?
         if (vapor) {
-            g.setColor(black);
+            g.setColor(Color.black);
             g.fillRect(0,0,2000,900);
             for (int x = 0; x<2000; x+=40) {
                 int mid  = 800;
@@ -123,7 +123,7 @@ public class art extends Canvas{
                 g.drawLine(0, h, 3000, h);
                 System.out.println(h);
             }
-            g.setColor(black);
+            g.setColor(Color.black);
             g.fillRect(0,0,2000, 350);
             int[] ys = new int[42];
             int[] xs = new int[42];
