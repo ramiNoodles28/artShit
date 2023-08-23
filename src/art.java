@@ -1,17 +1,9 @@
 import java.awt.*;
-import javax.crypto.spec.PSource;
 import javax.swing.JFrame;
-import java.lang.reflect.Array;
-import java.util.Comparator;
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.lang.Math;
-
-import static java.awt.Color.black;
-
 public class art extends Canvas{
-
     public void paint(Graphics g) {
         Random rng = new Random();
         //random color parameters (main hue, saturation, brightness, hue spread)
