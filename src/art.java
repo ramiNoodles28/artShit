@@ -52,12 +52,13 @@ public class art extends Canvas{
         boolean triangles = false;
         boolean bubbles = false;
         boolean circles = false;
+        boolean splitCircles = false;
         boolean vapor = false;
         boolean connectedCircles = false;
         boolean curves = false;
 
         int shape = rng.nextInt(5);
-        shape = 4;
+        shape = 5;
 
 
         if (shape == 0) rounds = true;
@@ -65,8 +66,9 @@ public class art extends Canvas{
         else if (shape == 2) bubbles = true;
         else if (shape == 3) curves = true;
         else if (shape == 4) circles = true;
-        else if (shape == 5) connectedCircles = true; //experimental
-        else if (shape == 6) vapor = true; //experimental
+        else if (shape == 5) splitCircles = true;
+        else if (shape == 6) connectedCircles = true; //experimental
+        else if (shape == 7) vapor = true; //experimental
         else palette = true;
 
 
@@ -248,6 +250,46 @@ public class art extends Canvas{
                 } */
             }
 
+        }
+
+        // split circles
+        if (splitCircles) {
+            System.out.println("circles");
+            int x = fWidth / 2 + 2;
+            int y = fHeight / 2 + 2;
+            int r = res / 10;
+
+            ArrayList<int[]> cCoords = new ArrayList<int[]>();
+            cCoords.add(new int[]{x,y,r});
+            boolean good;
+            int over = 0;
+            for (int i = 0; i<(res); i++){
+                System.out.println(i);
+                x = rng.nextInt(fWidth);;
+                y = rng.nextInt(fHeight);
+                r = rng.nextInt(60)+ 4;
+                good = true;
+                for (int[] coord : cCoords){
+                    double dist = Math.sqrt(Math.pow((coord[0]-x),2) + Math.pow((coord[1]-y),2));
+                    if ((coord[2]+r)>dist) {
+                        good = false;
+                        i--;
+                        break;
+                    }
+                }
+                if (good) {
+                    over = i;
+                    cCoords.add(new int[]{x,y,r});
+                }
+                over++;
+                if (i + 2000 < over) {
+                    break;
+                }
+            }
+            for (int[] coord:cCoords){
+                g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
+                g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
+            }
         }
 
         // bubbles
