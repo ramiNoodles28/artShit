@@ -53,7 +53,7 @@ public class art extends Canvas{
         boolean curves = false;
         //random image types
         int shape = rng.nextInt(5);
-        shape = 5;
+        //shape = 9;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) bubbles = true;
@@ -68,35 +68,35 @@ public class art extends Canvas{
         if (palette) {
             // base color
             g.setColor(base);
-            g.fillRect(0, 0, 600, 600);
+            g.fillRect(0, 0, fWidth, fHeight);
             //analogous of base
             g.setColor(clrA1);
-            g.fillRect(0, 200, 300, 300);
+            g.fillRect(0, fHeight/3, fWidth/2, 2*fHeight/3);
             g.setColor(clrA2);
-            g.fillRect(300, 200, 300, 300);
+            g.fillRect(fWidth/2, fHeight/3, fWidth/2, 2*fHeight/3);
             g.setColor(clrA3);
-            g.fillRect(0, 200, 150, 300);
+            g.fillRect(0, fHeight/3, fWidth/4, 2*fHeight/3);
             g.setColor(clrA4);
-            g.fillRect(450, 200, 150, 300);
+            g.fillRect(3*fWidth/4, fHeight/3, fWidth/4, 2*fHeight/3);
             // complementary color
             g.setColor(opp);
-            g.fillRect(0, 500, 600, 100);
+            g.fillRect(0, 2*fHeight/3, fWidth, fHeight / 3);
             // analogous of complement
             g.setColor(clrO1);
-            g.fillRect(0, 400, 300, 100);
+            g.fillRect(0, 2*fHeight/3, fWidth/2, fHeight/6);
             g.setColor(clrO2);
-            g.fillRect(300, 400, 300, 100);
+            g.fillRect(fWidth/2, 2*fHeight/3, fWidth/2, fHeight/6);
             g.setColor(clrO3);
-            g.fillRect(0, 400, 150, 100);
+            g.fillRect(0, 2*fHeight/3, fWidth/4, fHeight/6);
             g.setColor(clrO4);
-            g.fillRect(450, 400, 150, 100);
+            g.fillRect(3*fWidth/4, 2*fHeight/3, fWidth/4, fHeight/6);
         }
         // curves
         if (curves) {
             System.out.println("curves");
             int w = 90;
-            for(int x = 0; x<=2000; x+=w) {
-                for (int y = 0; y <= 1000; y += w) {
+            for(int x = 0; x<=fWidth; x+=w) {
+                for (int y = 0; y <= fHeight; y += w) {
                     g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
                     g.fillRect(x,y,w,w);
                     g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
@@ -138,7 +138,6 @@ public class art extends Canvas{
             g.setColor(oColors.get(rng.nextInt(5)));
             g.fillOval(700, 125, 200, 200);
         }
-
         //connectedCircles?
         if (connectedCircles) {
             System.out.println("connected circles");
@@ -241,7 +240,7 @@ public class art extends Canvas{
             int x = fWidth / 2 + 2;
             int y = fHeight / 2 + 2;
             int r = res / 10;
-            ArrayList<int[]> cCoords = new ArrayList<int[]>();
+            ArrayList<int[]> cCoords = new ArrayList<>();
             cCoords.add(new int[]{x,y,r});
             boolean good;
             int over = 0;
@@ -282,16 +281,16 @@ public class art extends Canvas{
             System.out.println("bubbles");
             //first layer of bubbles
             for (int i = 0; i<1000; i++){
-                int x = rng.nextInt(2000)-300;
-                int y = rng.nextInt(1300)-300;
+                int x = rng.nextInt(fWidth+600)-300;
+                int y = rng.nextInt(fHeight+600)-300;
                 int d = rng.nextInt(280)+20;
                 g.setColor((oColors.get(rng.nextInt(5))));
                 g.fillOval(x,y,d,d);
             }
             //second layer of bubbles
             for (int i = 0; i<100; i++){
-                int x = rng.nextInt(2000)-300;
-                int y = rng.nextInt(1300)-300;
+                int x = rng.nextInt(fWidth+600)-300;
+                int y = rng.nextInt(fHeight+600)-300;
                 int d = rng.nextInt(300);
                 g.setColor((aColors.get(rng.nextInt(5))));
                 g.fillOval(x,y,d,d);
@@ -324,8 +323,8 @@ public class art extends Canvas{
             System.out.println("rounds");
             int count = 0;
             int w = 100;
-            for(int y = 1200; y>=-200; y-=250) {
-                for (int x = 0; x <= 2000; x += w) {
+            for(int y = 3*fHeight/2; y>=-200; y-=250) {
+                for (int x = 0; x <= fWidth; x += w) {
                     if (count%2 == 0) g.setColor(aColors.get(rng.nextInt(5)));
                     else g.setColor(oColors.get(rng.nextInt(5)));
                     int h = (rng.nextInt(180) + 120);
