@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.lang.Math;
 
+import static java.awt.Color.black;
+
 public class art extends Canvas{
 
     public void paint(Graphics g) {
@@ -121,7 +123,7 @@ public class art extends Canvas{
 
         //vaporwave?
         if (vapor) {
-            g.setColor(Color.black);
+            g.setColor(black);
             g.fillRect(0,0,2000,900);
 
             for (int x = 0; x<2000; x+=40) {
@@ -135,7 +137,7 @@ public class art extends Canvas{
                 g.drawLine(0, h, 3000, h);
                 System.out.println(h);
             }
-            g.setColor(Color.black);
+            g.setColor(black);
             g.fillRect(0,0,2000, 350);
             int[] ys = new int[42];
             int[] xs = new int[42];
@@ -286,6 +288,8 @@ public class art extends Canvas{
                     break;
                 }
             }
+            g.setColor(new Color(100,100,100));
+            //g.fillRect(0,0,fWidth, fHeight);
             for (int[] coord:cCoords){
                 g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
                 g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
