@@ -8,7 +8,7 @@ public class art extends Canvas{
         Random rng = new Random();
         //random color parameters (main hue, saturation, brightness, hue spread)
         float hue1 = rng.nextFloat(1);
-        float h2Spr = (rng.nextFloat(.2f)+.3f);
+        float h2Spr = rng.nextFloat(.2f)+.3f;
         float hue2 = (hue1>0.5f) ? hue1-h2Spr : hue1+h2Spr;
         float sat = rng.nextFloat(0.6f)+0.4f;
         float br = rng.nextFloat(0.3f)+0.7f;
@@ -52,16 +52,17 @@ public class art extends Canvas{
         boolean connectedCircles = false;
         boolean curves = false;
         //random image types
-        int shape = rng.nextInt(5);
-        shape = 5;
+        int shape = rng.nextInt(4);
+        //shape = 5;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
-        else if (shape == 2) bubbles = true;
-        else if (shape == 3) curves = true;
-        else if (shape == 4) circles = true;
-        else if (shape == 5) splitCircles = true;
-        else if (shape == 6) connectedCircles = true; //experimental
-        else if (shape == 7) vapor = true; //experimental
+        else if (shape == 2) curves = true;
+        else if (shape == 3) splitCircles = true;
+
+        else if (shape == 6) circles = true;
+        else if (shape == 7) bubbles = true;
+        else if (shape == 8) connectedCircles = true; //experimental+
+        else if (shape == 9) vapor = true; //experimental
         else palette = true;
     //code for all the different generated image types
         //color palette
@@ -94,12 +95,16 @@ public class art extends Canvas{
         // curves
         if (curves) {
             System.out.println("curves");
-            int w = 90;
+            int w = 40;
             for(int x = 0; x<=fWidth; x+=w) {
                 for (int y = 0; y <= fHeight; y += w) {
-                    g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
+                    int weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
+                    g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
+                    //g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
                     g.fillRect(x,y,w,w);
-                    g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
+                    weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
+                    g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
+                    //g.setColor(allColors.get(rng.nextInt(2)).get(rng.nextInt(5)));
                     int corner = rng.nextInt(4);
                     if (corner == 0) g.fillArc(x,y,2*w, 2*w, 90, 90);
                     if (corner == 1) g.fillArc(x-w,y,2*w, 2*w, 0, 90);
@@ -322,13 +327,13 @@ public class art extends Canvas{
         if (rounds) {
             System.out.println("rounds");
             int count = 0;
-            int w = 100;
-            for(int y = 3*fHeight/2; y>=-200; y-=250) {
+            int w = 50;
+            for(int y = 3*fHeight/2; y>=-200; y-=200) {
                 for (int x = 0; x <= fWidth; x += w) {
                     if (count%2 == 0) g.setColor(aColors.get(rng.nextInt(5)));
                     else g.setColor(oColors.get(rng.nextInt(5)));
-                    int h = (rng.nextInt(180) + 120);
-                    g.fillRoundRect(x, -200, w, h+y, w, 100);
+                    int h = (rng.nextInt(200) );
+                    g.fillRoundRect(x, -200, w, h+y, w, w);
                 }
                 count++;
             }
