@@ -10,9 +10,9 @@ public class art extends Canvas{
         float hue1 = rng.nextFloat(1);
         float h2Spr = rng.nextFloat(.2f)+.3f;
         float hue2 = (hue1>0.5f) ? hue1-h2Spr : hue1+h2Spr;
-        float sat = rng.nextFloat(0.6f)+0.4f;
+        float sat = rng.nextFloat(0.4f)+0.6f;
         float br = rng.nextFloat(0.3f)+0.7f;
-        float spr = rng.nextFloat(0.06f)+0.02f;
+        float spr = rng.nextFloat(0.03f)+0.05f;
         //base & complementary colors
         Color base = Color.getHSBColor(hue1, sat, br);
         Color opp = Color.getHSBColor(hue2, sat, br);
@@ -54,7 +54,7 @@ public class art extends Canvas{
         boolean shapes = false;
         //random image types
         int shape = rng.nextInt(4);
-        shape = 3;
+        shape = 1;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
@@ -252,7 +252,7 @@ public class art extends Canvas{
             int over = 0;
             //generating new circles and checking if they overlap with other circles
             for (int i = 0; i<(res); i++){
-                System.out.println(i);
+                //System.out.println(i);
                 x = rng.nextInt(fWidth);;
                 y = rng.nextInt(fHeight);
                 r = rng.nextInt(res/32)+ 2;
@@ -387,6 +387,55 @@ public class art extends Canvas{
                 count++;
             }
         }
+        //spiderverse type shit
+        if (curves || triangles) {
+            System.out.println("circles");
+            //large center circle
+            int x = fWidth / 2;
+            int y = fHeight / 2;
+            int r = res / 6;
+            ArrayList<int[]> cCoords = new ArrayList<>();
+            cCoords.add(new int[]{x, y, r});
+            boolean good;
+            int over = 0;
+            //generating new circles and checking if they overlap with other circles
+            for (int i = 0; i < (res); i++) {
+                //System.out.println(i);
+                x = rng.nextInt(fWidth);
+                ;
+                y = rng.nextInt(fHeight);
+                r = rng.nextInt(res / 32) + 2;
+                good = true;
+                for (int[] coord : cCoords) {
+                    //only add circle to arrayList if its center's distance from all other circles is less than sum of radii
+                    double dist = Math.sqrt(Math.pow((coord[0] - x), 2) + Math.pow((coord[1] - y), 2));
+                    if ((coord[2] + r) > dist) {
+                        good = false;
+                        i--;
+                        break;
+                    }
+                }
+                if (good) {
+                    over = i;
+                    cCoords.add(new int[]{x, y, r});
+                }
+                //optimization so generation will stop if no new circles are found after 2000 checks
+                over++;
+                if (i + 2000 < over) {
+                    break;
+                }
+            }
+            //adding circles to frame, and coloring them based on which half of the frame they are on
+            cCoords.remove(0);
+            for (int[] coord : cCoords) {
+                g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
+                if (coord[2] <= 5) {
+                    int bwc = rng.nextInt(5);
+                    if (bwc == 0) g.setColor(Color.WHITE);
+                }
+                g.fillOval(coord[0] - coord[2], coord[1] - coord[2], coord[2] * 2, coord[2] * 2);
+            }
+        }
         //debug text printed to output
         System.out.printf(  "main hue:\t%f%n" +
                             "opp hue:\t%f%n" +
@@ -395,6 +444,7 @@ public class art extends Canvas{
                             "spread:\t%f%n%n",
                             hue1, hue2, sat, br, spr);
     }
+
     //main function that creates frame
     //I also don't really know why the frame resets everytime you adjust window size, but I like it
     public static void main(String[] args) {
