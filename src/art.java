@@ -280,8 +280,8 @@ public class art extends Canvas{
             int[] cen = {fWidth/2, fHeight/2};
             r = (int)(res / 8.3);
             Graphics2D g2 = (Graphics2D) g;
-            g2.setStroke(new BasicStroke(res/300, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-            for (double i = 1.1; i <= 4.9; i += .15 * Math.cos(Math.PI * ((i + 1.0)/4.0)) + .33) {
+            g2.setStroke(new BasicStroke(res/280, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            for (double i = 1.4; i <= 4.8; i += .15 * Math.cos(Math.PI * ((i + 1.0)/4.0)) + .33) {
                 int cSplit = (i < 3) ? 1 : 0;
                 g.setColor(allColors.get(cSplit).get(rng.nextInt(5)));
                 double ang = (i * Math.PI/4.0);
