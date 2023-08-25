@@ -243,8 +243,8 @@ public class art extends Canvas{
         if (splitCircles) {
             System.out.println("circles");
             //large center circle
-            int x = fWidth / 2 + 2;
-            int y = fHeight / 2 + 2;
+            int x = fWidth / 2;
+            int y = fHeight / 2;
             int r = res / 8;
             ArrayList<int[]> cCoords = new ArrayList<>();
             cCoords.add(new int[]{x,y,r});
@@ -276,30 +276,28 @@ public class art extends Canvas{
                     break;
                 }
             }
-
-            for (int i = 0; i < res; i += res/100) {
-                int cSplit = (i >= res/2) ? 1 : 0;
+            //drawing lines that run across the empty center circle
+            int[] cen = {fWidth/2, fHeight/2};
+            r = (int)(res / 8.3);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(res/300, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            for (double i = 1.1; i <= 4.9; i += .15 * Math.cos(Math.PI * ((i + 1.0)/4.0)) + .33) {
+                int cSplit = (i < 3) ? 1 : 0;
                 g.setColor(allColors.get(cSplit).get(rng.nextInt(5)));
-
-                g.drawLine(0, i, i, 0);
-                g.drawLine(0, i+1, i+1, 0);
-                g.drawLine(1, i+1, i+1, 1);
-
+                double ang = (i * Math.PI/4.0);
+                double x1 = (Math.cos(ang) * (double)r) + cen[0];
+                double y1 = (Math.sin(ang) * (double)r) + cen[1];
+                double x2 = (Math.cos(Math.PI/2 -ang) * (double)r) + cen[0];
+                double y2 = (Math.sin(Math.PI/2 -ang) * (double)r) + cen[1];
+                g2.drawLine( (int) x1, (int) y1, (int) x2, (int) y2);
             }
-
             //adding circles to frame, and coloring them based on which half of the frame they are on
-            /*for (int[] coord:cCoords){
-                g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
-                if (coord[2] == res/10) g.setColor(bg);
-                g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
-            }*/
-            //cCoords.remove(0);
+            cCoords.remove(0);
             for (int[] coord:cCoords){
                 g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
                 if (coord[2] == res/8) g.setColor(bg);
                 g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
             }
-
         }
         //shapes
         if (shapes) {
@@ -316,7 +314,7 @@ public class art extends Canvas{
                     System.out.println("hi");
                 }
             }
-//t         //squares
+            //squares
             for (int i = 0; i < w; i += w/10) {
                 int sNum = rng.nextInt(w/12);
                 for (int j = 0; j < sNum; j++) {
