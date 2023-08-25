@@ -51,14 +51,15 @@ public class art extends Canvas{
         boolean vapor = false;
         boolean connectedCircles = false;
         boolean curves = false;
+        boolean shapes = false;
         //random image types
         int shape = rng.nextInt(4);
-        //shape = 5;
+        shape = 3;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
         else if (shape == 3) splitCircles = true;
-
+        else if (shape == 4) shapes = true;
         else if (shape == 6) circles = true;
         else if (shape == 7) bubbles = true;
         else if (shape == 8) connectedCircles = true; //experimental+
@@ -244,7 +245,7 @@ public class art extends Canvas{
             //large center circle
             int x = fWidth / 2 + 2;
             int y = fHeight / 2 + 2;
-            int r = res / 10;
+            int r = res / 8;
             ArrayList<int[]> cCoords = new ArrayList<>();
             cCoords.add(new int[]{x,y,r});
             boolean good;
@@ -254,7 +255,7 @@ public class art extends Canvas{
                 System.out.println(i);
                 x = rng.nextInt(fWidth);;
                 y = rng.nextInt(fHeight);
-                r = rng.nextInt(60)+ 4;
+                r = rng.nextInt(res/32)+ 2;
                 good = true;
                 for (int[] coord : cCoords){
                     //only add circle to arrayList if its center's distance from all other circles is less than sum of radii
@@ -275,11 +276,61 @@ public class art extends Canvas{
                     break;
                 }
             }
+
+            for (int i = 0; i < res; i += res/100) {
+                int cSplit = (i >= res/2) ? 1 : 0;
+                g.setColor(allColors.get(cSplit).get(rng.nextInt(5)));
+
+                g.drawLine(0, i, i, 0);
+                g.drawLine(0, i+1, i+1, 0);
+                g.drawLine(1, i+1, i+1, 1);
+
+            }
+
             //adding circles to frame, and coloring them based on which half of the frame they are on
+            /*for (int[] coord:cCoords){
+                g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
+                if (coord[2] == res/10) g.setColor(bg);
+                g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
+            }*/
+            //cCoords.remove(0);
             for (int[] coord:cCoords){
                 g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
+                if (coord[2] == res/8) g.setColor(bg);
                 g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
             }
+
+        }
+        //shapes
+        if (shapes) {
+            int w = fWidth / 3;
+            //rounds
+            for (int i = 0; i < w; i += (w/10)) {
+                g.setColor(aColors.get(rng.nextInt(5)));
+                g.fillRoundRect(i, -w/10, w/10, rng.nextInt(2*w)+w/2,w/10, w/10);
+            }
+            //triangles
+            for (int i = 0; i < w; i += w/10) {
+                int tNum = rng.nextInt(w/5);
+                for (int j = 0; j < tNum; j++) {
+                    System.out.println("hi");
+                }
+            }
+//t         //squares
+            for (int i = 0; i < w; i += w/10) {
+                int sNum = rng.nextInt(w/12);
+                for (int j = 0; j < sNum; j++) {
+                    g.setColor(aColors.get(rng.nextInt(5)));
+                    g.fillRect(i+(2*w), j*(w/10)+(w/2), w/10, w/10);
+                }
+            }
+
+            g.setColor(aColors.get(rng.nextInt(5)));
+            g.fillOval(0, -w/2, w, w);
+            g.setColor(oColors.get(rng.nextInt(5)));
+            g.fillPolygon(new int[] {w, 2*w, w}, new int[] {0,0,w},3 );
+            g.setColor(aColors.get(rng.nextInt(5)));
+            g.fillRect(2*w, 0, w, w/2);
         }
         // bubbles
         if (bubbles) {
@@ -352,7 +403,7 @@ public class art extends Canvas{
         art m = new art();
         JFrame f = new JFrame();
         f.add(m);
-        f.setSize(1000, 600);
+        f.setSize(900, 900);
         f.setVisible(true);
         f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
     }
