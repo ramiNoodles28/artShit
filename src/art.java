@@ -389,7 +389,15 @@ public class art extends Canvas{
         }
         //spiderverse type shit
         if (curves || triangles) {
-            System.out.println("circles");
+            System.out.println("spiderverse");
+            //vignette
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(res/500, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            int[] cen = {fWidth/2, fHeight/2};
+            for (int i = res/2; i >= 0; i -= 1) {
+                g.setColor(new Color(0f,0f,0f,((float)i/(float)(3*res))));
+                g2.drawOval(cen[0]-i,cen[1]-i,2*i,2*i);
+            }
             //large center circle
             int x = fWidth / 2;
             int y = fHeight / 2;
@@ -434,9 +442,11 @@ public class art extends Canvas{
                 }
                 g.fillOval(coord[0] - coord[2], coord[1] - coord[2], coord[2] * 2, coord[2] * 2);
             }
-            int[] cen = {fWidth/2, fHeight/2};
+            //black spots
             int[] cenL = {3*fWidth/5, 2*fHeight/5};
             int[] cenR = {2*fWidth/5, 3*fHeight/5};
+            int[] cenL2 = {2*fWidth/3, fHeight/3};
+            int[] cenR2 = {fWidth/3, 2*fHeight/3};
             for (int i = 0; i < (res); i++) {
                 x = rng.nextInt(fWidth);
                 y = rng.nextInt(fHeight);
@@ -444,7 +454,11 @@ public class art extends Canvas{
                 double cDist = Math.sqrt(Math.pow(cen[0]-x, 2) + Math.pow(cen[1]-y, 2));
                 double lDist = Math.sqrt(Math.pow(cenL[0]-x, 2) + Math.pow(cenL[1]-y, 2));
                 double rDist = Math.sqrt(Math.pow(cenR[0]-x, 2) + Math.pow(cenR[1]-y, 2));
-                if ((cDist/3 + r*2) > (res/30) && (lDist/4 + r*2) > (res/60) && (rDist/4 + r*2) > (res/60)) {
+                double l2Dist = Math.sqrt(Math.pow(cenL2[0]-x, 2) + Math.pow(cenL[1]-y, 2));
+                double r2Dist = Math.sqrt(Math.pow(cenR2[0]-x, 2) + Math.pow(cenR[1]-y, 2));
+                if ((cDist/3 + r*2) > (res/30)
+                        && (lDist/3 + r*2) > (res/60) && (rDist/3 + r*2) > (res/60)
+                        && (l2Dist/3 + r*2) > (res/90) && (r2Dist/3 + r*2) > (res/90)) {
                     i--;
                 } else {
                     int oBlack = rng.nextInt(30);
@@ -456,9 +470,9 @@ public class art extends Canvas{
         //debug text printed to output
         System.out.printf(  "main hue:\t%f%n" +
                             "opp hue:\t%f%n" +
-                            "sat:\t%f%n" +
-                            "bri:\t%f%n" +
-                            "spread:\t%f%n%n",
+                            "sat:\t\t%f%n" +
+                            "bri:\t\t%f%n" +
+                            "spread:\t\t%f%n%n",
                             hue1, hue2, sat, br, spr);
     }
 
