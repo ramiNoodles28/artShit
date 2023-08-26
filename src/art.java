@@ -53,7 +53,7 @@ public class art extends Canvas{
         boolean curves = false;
         boolean shapes = false;
         //random image types
-        int shape = rng.nextInt(4);
+        int shape = rng.nextInt(2)+1;
         shape = 1;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
@@ -96,7 +96,7 @@ public class art extends Canvas{
         // curves
         if (curves) {
             System.out.println("curves");
-            int w = 40;
+            int w = 20;
             for(int x = 0; x<=fWidth; x+=w) {
                 for (int y = 0; y <= fHeight; y += w) {
                     int weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
@@ -402,7 +402,6 @@ public class art extends Canvas{
             for (int i = 0; i < (res); i++) {
                 //System.out.println(i);
                 x = rng.nextInt(fWidth);
-                ;
                 y = rng.nextInt(fHeight);
                 r = rng.nextInt(res / 32) + 2;
                 good = true;
@@ -434,6 +433,24 @@ public class art extends Canvas{
                     if (bwc == 0) g.setColor(Color.WHITE);
                 }
                 g.fillOval(coord[0] - coord[2], coord[1] - coord[2], coord[2] * 2, coord[2] * 2);
+            }
+            int[] cen = {fWidth/2, fHeight/2};
+            int[] cenL = {3*fWidth/5, 2*fHeight/5};
+            int[] cenR = {2*fWidth/5, 3*fHeight/5};
+            for (int i = 0; i < (res); i++) {
+                x = rng.nextInt(fWidth);
+                y = rng.nextInt(fHeight);
+                r = rng.nextInt(res / 20) + 2;
+                double cDist = Math.sqrt(Math.pow(cen[0]-x, 2) + Math.pow(cen[1]-y, 2));
+                double lDist = Math.sqrt(Math.pow(cenL[0]-x, 2) + Math.pow(cenL[1]-y, 2));
+                double rDist = Math.sqrt(Math.pow(cenR[0]-x, 2) + Math.pow(cenR[1]-y, 2));
+                if ((cDist/3 + r*2) > (res/30) && (lDist/4 + r*2) > (res/60) && (rDist/4 + r*2) > (res/60)) {
+                    i--;
+                } else {
+                    int oBlack = rng.nextInt(30);
+                    g.setColor(new Color(oBlack, oBlack, oBlack));
+                    g.fillOval(x - r, y - r, 2*r, 2*r);
+                }
             }
         }
         //debug text printed to output
