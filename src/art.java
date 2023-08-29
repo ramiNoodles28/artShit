@@ -52,14 +52,16 @@ public class art extends Canvas{
         boolean connectedCircles = false;
         boolean curves = false;
         boolean shapes = false;
+        boolean spiderverse = false;
         //random image types
         int shape = rng.nextInt(2)+1;
-        shape = 1;
+        shape = 3;
         if (shape == 0) rounds = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
         else if (shape == 3) splitCircles = true;
         else if (shape == 4) shapes = true;
+        else if (shape == 5) spiderverse = true;
         else if (shape == 6) circles = true;
         else if (shape == 7) bubbles = true;
         else if (shape == 8) connectedCircles = true; //experimental+
@@ -388,16 +390,38 @@ public class art extends Canvas{
             }
         }
         //spiderverse type shit
-        if (curves || triangles) {
+        if (spiderverse) {
             System.out.println("spiderverse");
-            //vignette
-            Graphics2D g2 = (Graphics2D) g;
-            g2.setStroke(new BasicStroke(res/500, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
             int[] cen = {fWidth/2, fHeight/2};
+            int w = 30;
+            for(int x = 0; x<= fWidth; x+=w) {
+                for (int y = 0; y <= fHeight; y += w) {
+                    //bottom triangles
+                    //generating color gradient by painting triangle either base or complement depending on position
+                    int weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
+                    g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
+                    int[] xs = {x,x,(x+w)};
+                    int[] ys = {y, y+w, y+w};
+                    g.fillPolygon(xs,ys,3);
+                    //top triangles
+                    weightedRandom = (rng.nextInt(res) + (x+y)) >= (res)? 1 : 0;
+                    g.setColor(allColors.get(weightedRandom).get(rng.nextInt(5)));
+                    int[] as = {x,(x+w),(x+w)};
+                    int[] bs = {y, y, y+w};
+                    g.fillPolygon(as,bs,3);
+                }
+            }
+            //vignette
+            g.setColor(new Color(0f,0f,0f,.2f));
+            g.fillRect(0,0,fWidth,fHeight);
+
+            /*Graphics2D g2 = (Graphics2D) g;
+            g2.setStroke(new BasicStroke(res/500, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
             for (int i = res/2; i >= 0; i -= 1) {
                 g.setColor(new Color(0f,0f,0f,((float)i/(float)(3*res))));
                 g2.drawOval(cen[0]-i,cen[1]-i,2*i,2*i);
-            }
+            }*/
             //large center circle
             int x = fWidth / 2;
             int y = fHeight / 2;
