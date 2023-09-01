@@ -35,6 +35,12 @@ public class art extends Canvas{
             /*sat = rng.nextFloat(0.06f) + .05f;;
             br = .9f;
             spr = .04f;*/
+            //coop
+            /*hue1 = .57f;
+            hue2 = .3f;
+            sat = .8f;
+            br = .8f;
+            spr = .04f;*/
         //base & complementary colors
         Color base = Color.getHSBColor(hue1, sat, br);
         Color opp = Color.getHSBColor(hue2, sat, br);
@@ -71,8 +77,8 @@ public class art extends Canvas{
         boolean curves = false;
         boolean spiderverse = false;
         //random image types
-        int shape = rng.nextInt(2)+1;
-        shape = 4;
+        int shape = rng.nextInt(5);
+        //shape = 1;
         if (shape == 0) circles = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
@@ -245,7 +251,7 @@ public class art extends Canvas{
         if (triangles) {
             System.out.println("triangles");
             int w = 30;
-            for(int x = 0; x<= fWidth; x+=w) {
+            for (int x = 0; x<= fWidth; x+=w) {
                 for (int y = 0; y <= fHeight; y += w) {
                     //bottom triangles
                     //generating color gradient by painting triangle either base or complement depending on position
