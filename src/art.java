@@ -32,9 +32,9 @@ public class art extends Canvas{
             br = .95f;
             spr = .02f;*/
             //off-white
-            sat = rng.nextFloat(0.06f) + .05f;;
+            /*sat = rng.nextFloat(0.06f) + .05f;;
             br = .9f;
-            spr = .04f;
+            spr = .04f;*/
         //base & complementary colors
         Color base = Color.getHSBColor(hue1, sat, br);
         Color opp = Color.getHSBColor(hue2, sat, br);
@@ -72,12 +72,12 @@ public class art extends Canvas{
         boolean spiderverse = false;
         //random image types
         int shape = rng.nextInt(2)+1;
-        shape = 5;
+        shape = 4;
         if (shape == 0) circles = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
         else if (shape == 3) splitCircles = true;
-        else if (shape == 5) spiderverse = true;
+        else if (shape == 4) spiderverse = true;
         else palette = true;
     //code for all the different generated image types
         //color palette
@@ -172,8 +172,8 @@ public class art extends Canvas{
                 g.fillOval(coord[0]-coord[2], coord[1]-coord[2], coord[2]*2, coord[2]*2);
                 // rings
                 //g.setColor(bg);
-                //int smallr = coord[2]- 5;
-                //g.fillOval(coord[0]-smallr, coord[1]-smallr, smallr*2, smallr*2);
+                //int smallR = coord[2]- 5;
+                //g.fillOval(coord[0]-smallR, coord[1]-smallR, smallR*2, smallR*2);
                 /*try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -267,6 +267,7 @@ public class art extends Canvas{
         if (spiderverse) {
             System.out.println("spiderverse");
             int[] cen = {fWidth/2, fHeight/2};
+            //background triangles
             int w = res / 50;
             for(int x = 0; x<= fWidth; x+=w) {
                 for (int y = 0; y <= fHeight; y += w) {
@@ -296,7 +297,7 @@ public class art extends Canvas{
                 g.setColor(new Color(0f,0f,0f,((float)i/(float)(3*res))));
                 g2.drawOval(cen[0]-i,cen[1]-i,2*i,2*i);
             }*/
-            //large center circle
+            //large empty center circle
             int x = fWidth / 2;
             int y = fHeight / 2;
             int r = res / 6;
@@ -334,6 +335,7 @@ public class art extends Canvas{
             cCoords.remove(0);
             for (int[] coord : cCoords) {
                 g.setColor(allColors.get((coord[0] + coord[1]) / (res / 2 + 1)).get(rng.nextInt(5)));
+                //scattered white spots for fun
                 if (coord[2] <= 5) {
                     int bwc = 1;//rng.nextInt(5);
                     if (bwc == 0) g.setColor(Color.WHITE);
@@ -363,7 +365,7 @@ public class art extends Canvas{
                         && (l2Dist/3 + r*2) > (res/90) && (r2Dist/3 + r*2) > (res/90)
                         && (l3Dist/2 + r*3) > (res/90) && (r3Dist/2 + r*3) > (res/90)) {
                     i--;
-                } else {
+                } else { //coloring black circles different shades
                     int oBlack = rng.nextInt(40);
                     if (sat < .11f) oBlack = rng.nextInt(40)+60;
                     g.setColor(new Color(oBlack, oBlack, oBlack));
