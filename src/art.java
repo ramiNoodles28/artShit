@@ -1,12 +1,26 @@
 import java.awt.*;
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 import java.util.ArrayList;
 import java.lang.Math;
 public class art extends Canvas{
+    static int p = 0;
     public void paint(Graphics g) {
-        Random rng = new Random();
+        //current frame width, height, and "resolution" (not actually tho)
+        int fWidth = 3000;//getWidth();
+        int fHeight = 3000;//getHeight();
+        int res = fHeight + fWidth;
+        //setting up to paint to image file
+        BufferedImage bufferedImage = new BufferedImage(fWidth, fHeight, BufferedImage.TYPE_INT_RGB);
+        g = bufferedImage.createGraphics();
+        RenderedImage rendImage = bufferedImage;
         //random color parameters (main hue, saturation, brightness, hue spread)
+        Random rng = new Random();
         float hue1 = rng.nextFloat(1);
         float h2Spr = rng.nextFloat(.2f)+.3f;
         float hue2 = (hue1>0.5f) ? hue1-h2Spr : hue1+h2Spr;
@@ -65,10 +79,6 @@ public class art extends Canvas{
         //2d arrayList of all colors
         ArrayList<ArrayList<Color>> allColors = new ArrayList<>();
         allColors.add(aColors); allColors.add(oColors);
-        //current frame width, height, and "resolution" (not actually tho)
-        int fWidth = getWidth();
-        int fHeight = getHeight();
-        int res = fHeight + fWidth;
         //different generated image types
         boolean palette = false;
         boolean triangles = false;
@@ -78,13 +88,14 @@ public class art extends Canvas{
         boolean spiderverse = false;
         //random image types
         int shape = rng.nextInt(5);
-        //shape = 1;
+        shape = 4;
         if (shape == 0) circles = true;
         else if (shape == 1) triangles = true;
         else if (shape == 2) curves = true;
         else if (shape == 3) splitCircles = true;
         else if (shape == 4) spiderverse = true;
         else palette = true;
+
     //code for all the different generated image types
         //color palette
         if (palette) {
@@ -366,10 +377,10 @@ public class art extends Canvas{
                 double r2Dist = Math.sqrt(Math.pow(cenR2[0]-x, 2) + Math.pow(cenR2[1]-y, 2));
                 double l3Dist = Math.sqrt(Math.pow(cenL3[0]-x, 2) + Math.pow(cenL3[1]-y, 2));
                 double r3Dist = Math.sqrt(Math.pow(cenR3[0]-x, 2) + Math.pow(cenR3[1]-y, 2));
-                if ((cDist/3 + r*2) > (res/30)
-                        && (lDist/3 + r*2) > (res/60) && (rDist/3 + r*2) > (res/60)
-                        && (l2Dist/3 + r*2) > (res/90) && (r2Dist/3 + r*2) > (res/90)
-                        && (l3Dist/2 + r*3) > (res/90) && (r3Dist/2 + r*3) > (res/90)) {
+                if ((cDist/3 + r*2) > (res/30) //ball
+                        && (lDist/3 + r*2) > (res/65) && (rDist/3 + r*2) > (res/65) //buldge
+                        && (l2Dist/3 + r*2) > (res/120) && (r2Dist/3 + r*2) > (res/120) //tip
+                        && (l3Dist/3 + r*2) > (res/90) && (r3Dist/3 + r*2) > (res/90)) { //shaft
                     i--;
                 } else { //coloring black circles different shades
                     int oBlack = rng.nextInt(40);
@@ -384,8 +395,19 @@ public class art extends Canvas{
                             "opp hue:\t%f%n" +
                             "sat:\t\t%f%n" +
                             "bri:\t\t%f%n" +
-                            "spread:\t\t%f%n%n",
+                            "spread:\t\t%f%n",
                             hue1, hue2, sat, br, spr);
+        //save to png in imgs folder
+        String path = String.format("imgs\\ramiArt%d.bmp", p);
+        File file = new File(path);
+        try {
+            System.out.printf("slay%n%n");
+            p++;
+            ImageIO.write(rendImage, "bmp", file);
+        } catch (IOException e) {
+            System.out.println("rip");
+            throw new RuntimeException(e);
+        }
     }
 
     //main function that creates frame
@@ -397,5 +419,8 @@ public class art extends Canvas{
         f.setSize(900, 900);
         f.setVisible(true);
         f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
+
+
+
     }
 }
