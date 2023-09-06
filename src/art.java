@@ -12,20 +12,29 @@ public class art extends Canvas{
     static int p = 0;
     public void paint(Graphics g) {
         //current frame width, height, and "resolution" (not actually tho)
-        int fWidth = 3000;//getWidth();
-        int fHeight = 3000;//getHeight();
+        int fWidth = getWidth();
+        int fHeight = getHeight();
         int res = fHeight + fWidth;
         //setting up to paint to image file
-        BufferedImage bufferedImage = new BufferedImage(fWidth, fHeight, BufferedImage.TYPE_INT_RGB);
-        g = bufferedImage.createGraphics();
-        RenderedImage rendImage = bufferedImage;
+        boolean save = false;
+        RenderedImage rendImage = null;
+        if (save) {
+            fWidth = 3000;
+            fHeight = 3000;
+            res = fHeight + fWidth;
+            BufferedImage bufferedImage = new BufferedImage(fWidth, fHeight, BufferedImage.TYPE_INT_RGB);
+            g = bufferedImage.createGraphics();
+            rendImage = bufferedImage;
+        }
         //random color parameters (main hue, saturation, brightness, hue spread)
         Random rng = new Random();
         float hue1 = rng.nextFloat(1);
         float h2Spr = rng.nextFloat(.2f)+.3f;
         float hue2 = (hue1>0.5f) ? hue1-h2Spr : hue1+h2Spr;
         float sat = rng.nextFloat(0.4f)+0.6f;
+        float sat2 = sat;
         float br = rng.nextFloat(0.3f)+0.7f;
+        float br2 = br;
         float spr = rng.nextFloat(0.03f)+0.05f;
         //palettes I like...
             //pastel orange/blue
@@ -55,19 +64,21 @@ public class art extends Canvas{
             sat = .8f;
             br = .8f;
             spr = .04f;*/
+        sat2 = sat;
+        br2 = br;
         //base & complementary colors
         Color base = Color.getHSBColor(hue1, sat, br);
-        Color opp = Color.getHSBColor(hue2, sat, br);
+        Color opp = Color.getHSBColor(hue2, sat2, br2);
         //analogous to base colors
         Color clrA1 = Color.getHSBColor(hue1+(spr/2.0f), sat*0.95f, br*.9f);
         Color clrA2 = Color.getHSBColor(hue1-(spr/2.0f), sat*0.95f, br*.9f);
         Color clrA3 = Color.getHSBColor(hue1+spr, sat*0.9f, br);
         Color clrA4 = Color.getHSBColor(hue1-spr, sat*0.9f, br);
         //analogous to complementary colors
-        Color clrO1 = Color.getHSBColor(hue2+(spr/2.0f), sat*0.95f, br*.9f);
-        Color clrO2 = Color.getHSBColor(hue2-(spr/2.0f), sat*0.95f, br*.9f);
-        Color clrO3 = Color.getHSBColor(hue2+spr, sat*0.9f, br);
-        Color clrO4 = Color.getHSBColor(hue2-spr, sat*0.9f, br);
+        Color clrO1 = Color.getHSBColor(hue2+(spr/2.0f), sat2*0.95f, br2*.9f);
+        Color clrO2 = Color.getHSBColor(hue2-(spr/2.0f), sat2*0.95f, br2*.9f);
+        Color clrO3 = Color.getHSBColor(hue2+spr, sat2*0.9f, br2);
+        Color clrO4 = Color.getHSBColor(hue2-spr, sat2*0.9f, br2);
         //background color
         Color bg = new Color(238,238,238);
         //base color arrayList
@@ -398,16 +409,19 @@ public class art extends Canvas{
                             "spread:\t\t%f%n",
                             hue1, hue2, sat, br, spr);
         //save to png in imgs folder
-        String path = String.format("imgs\\ramiArt%d.bmp", p);
-        File file = new File(path);
-        try {
-            System.out.printf("slay%n%n");
-            p++;
-            ImageIO.write(rendImage, "bmp", file);
-        } catch (IOException e) {
-            System.out.println("rip");
-            throw new RuntimeException(e);
+        if (save) {
+            String path = String.format("imgs\\ramiArt%d.bmp", p);
+            File file = new File(path);
+            try {
+                System.out.printf("slay%n%n");
+                p++;
+                ImageIO.write(rendImage, "bmp", file);
+            } catch (IOException e) {
+                System.out.println("rip");
+                throw new RuntimeException(e);
+            }
         }
+
     }
 
     //main function that creates frame
@@ -419,8 +433,5 @@ public class art extends Canvas{
         f.setSize(900, 900);
         f.setVisible(true);
         f.setDefaultCloseOperation(f.EXIT_ON_CLOSE);
-
-
-
     }
 }
